@@ -1,0 +1,21 @@
+functions:
+  current_datetime:
+    _type: current_datetime
+
+llms:
+  nim_llm:
+    _type: fallback_nim
+    primary_model: nvidia/nemotron-3-ultra-550b-a55b
+    fallback_models:
+      - nvidia/nemotron-3-super-120b-a12b
+      - openai/gpt-oss-20b
+      - meta/muse-glimmer-30b
+      - meta/llama-3.2-11b-vision-instruct
+    base_url: https://integrate.api.nvidia.com/v1
+    temperature: 0.0
+    max_tokens: 512
+
+workflow:
+  _type: react_agent
+  llm_name: nim_llm
+  tool_names: [current_datetime]

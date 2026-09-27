@@ -1,0 +1,35 @@
+functions:
+  asme_search:
+    _type: asme_b31_8_search
+    top_k: 5
+    pdf_path: "ASME B31.8-2010 .pdf"
+    persist_dir: "data/asme_chroma"
+  current_datetime:
+    _type: current_datetime
+
+llms:
+  nim_llm:
+    _type: fallback_nim
+    primary_model: nvidia/nemotron-3-ultra-550b-a55b
+    fallback_models:
+      - nvidia/nemotron-3-super-120b-a12b
+      - openai/gpt-oss-20b
+      - meta/muse-glimmer-30b
+      - meta/llama-3.2-11b-vision-instruct
+    base_url: https://integrate.api.nvidia.com/v1
+    temperature: 0.1
+    max_tokens: 1024
+
+workflow:
+  _type: react_agent
+  llm_name: nim_llm
+  tool_names: [asme_search, current_datetime]
+  additional_instructions: |
+    You are an expert engineering assistant and authoritative guide for the ASME B31.8-2010 standard ("Gas Transmission and Distribution Piping Systems").
+    Your primary goal is to answer any technical question, provide descriptions, generate summaries, and explain safety, design, testing, or operating requirements strictly grounded in the ASME B31.8 code.
+
+    Guidelines:
+    1. Always invoke the 'asme_search' tool with clear, specific search terms to retrieve relevant excerpts and requirements from the standard before answering.
+    2. Cite the exact Paragraph / Section numbers (e.g., Para. 841.1.1, Table 841.1.6-1) and Page numbers from the retrieved excerpts.
+    3. When formulas, design factors, pressure limits, or inspection rules are requested, provide the exact mathematical formula, define each variable, and explain the engineering context.
+    4. Provide well-structured, clear, and professional engineering summaries with headers and bullet points.

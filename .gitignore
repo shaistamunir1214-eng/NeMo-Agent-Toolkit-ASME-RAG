@@ -1,0 +1,18 @@
+# Virtual environment
+.venv/
+
+# Environment secrets
+.env
+*.env.local
+
+# Python cache & build
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# NAT runtime logs & artifacts
+*.log
+.tmp/
